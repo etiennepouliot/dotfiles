@@ -1,4 +1,3 @@
-
 set nocompatible              " be iMproved, required
 filetype off                  " required
 " All of your Plugins must be added before the following line
@@ -14,10 +13,30 @@ Plugin 'VundleVim/Vundle.vim'
 " plug de stats bar
 Plugin 'vim-airline/vim-airline'
 set laststatus=2
-"Plugin 'davidhalter/jedi-vim'
 Plugin 'luochen1990/rainbow'
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+Plugin 'junegunn/vim-easy-align'
 Plugin 'Townk/vim-autoclose'
+Plugin 'hdima/python-syntax'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'Vimjas/vim-python-pep8-indent'
+Plugin 'dense-analysis/ale'
+Plugin 'smbl64/vim-black-macchiato'
+Plugin 'vim-scripts/Improved-AnsiEsc'
+
+let g:black_skip_string_normalization=1
+" Check Python files with flake8 and pylint.
+let b:ale_linters = ['flake8' ]
+"  E221, # Multiple spaces before operator
+"  E241, # Multiple spaces after ','
+"  E251, # Unexpected spaces around keyword / parameter equals 
+"  E%01, # Line too long
+"  W503, # Line break occurred before a binary operator (W503) <-- Conflit avec W504
+let g:ale_python_flake8_options="--ignore=E221,E241,E251,E501,W503"
+" Fix Python files with autopep8 and yapf.
+let b:ale_fixers = ['autopep8']
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
@@ -36,7 +55,7 @@ filetype plugin indent on    " required
 
 set ts=4 sw=4 sta et sts=4 ai
 let python_highlight_all = 1
-set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+"set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 syntax on
 set nowrap
 set ic
@@ -54,10 +73,13 @@ match importpdb /.*pdb.*/
 
 let mapleader=","
 
-nnoremap <leader>p oimport ipdb; ipdb.set_trace()<Esc>
+nnoremap <leader>p oimport ipdb; ipdb.set_trace()# noqa<Esc>
 nnoremap <leader>f oprint("".format())<Esc>9hhi
 nnoremap <leader>d odef():<Esc>hhi
 set pastetoggle=<leader>v
+nnoremap <space>l :lnext<CR>
+nnoremap <space>p :lprevious<CR>
+nnoremap <space>r :lrewind<CR>
 
 :function ToggleWrap()
 : if (&wrap == 1)
@@ -74,9 +96,9 @@ set pastetoggle=<leader>v
 
 map <leader>w :call ToggleWrap()<CR>
 
+set hlsearch
+
 " Fix backspace
 set backspace=indent,eol,start
+set background=light
 
-" Pour ruby
-autocmd Filetype ruby setlocal ts=2 sw=2 expandtab
-autocmd Filetype ruby nnoremap <leader>p orequire 'pry' ; binding.pry<Esc>
